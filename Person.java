@@ -18,15 +18,21 @@ class Person{
   }
   
   public void fill(int[] choices){
-	  System.out.println(choices[0] + "," + choices[1] + "," + choices[2] + "," + choices[3] + "," + choices[4] + " " + name);
+	  
 	  schedule = new int[choices.length];
 	  for (int i = 0; i < choices.length; i++) {//copies choices to schedule. You have to copy each element or else just the pointer gets copied
 		schedule[i] = choices[i];
+		//System.out.println(schedule[i]);
       }
+      //System.out.println(choices[0] + "," + choices[1] + "," + choices[2] + "," + choices[3] + "," + choices[4] + " " + name);
   }
   
   public int getS(int n){
-	  return schedule[n];
+	  if(schedule!=null){
+		  //System.out.println(schedule[n]);
+		  return schedule[n];
+	  }
+	  return -1;
   }
   
   public Person(String name, int id){
@@ -43,6 +49,11 @@ class Person{
 	  }
 		  
 	  return "Name: " + name + " Pref1: " + pref1 + " Pref2: " + pref2 + " Pref3: " + pref3 + " Pref4: " + pref4 + " Pref5: " + pref5;
+  }
+  
+  
+  public String getN(){
+	  return name;
   }
   
   public int get1(){

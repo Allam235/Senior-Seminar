@@ -1,16 +1,22 @@
+import java.util.ArrayList;
+import java.io.FileWriter;   // Import the FileWriter class
+
+
+
+
 class Event{
 
   private String teacher;
   private String name;
   private int id;
-  private int capacity;
+  private ArrayList<Person> people = new ArrayList<Person>();
   
 
   public Event(String name, String s1, int id){
     this.name = name;
     this.teacher = s1.substring(0, s1.length()-6);
     this.id = id;
-    capacity = 0;
+
   }
   
   public String getT(){
@@ -18,17 +24,28 @@ class Event{
   }
   
   public int getC(){
-	  return capacity;
+	  return people.size();
   }
-  public void fill(){
-	  capacity++;
+  public void fill(Person p){
+	  people.add(p);
   }
+  
+
   
   public String toString(int n){
 	  if(n == 1){
 		  return name;
 	  }
 	  return("Teacher: " + teacher + " Name: " + name + " id: " + id);
+  }
+  
+  public StringBuilder roster(){
+	  StringBuilder line = new StringBuilder();
+	  line.append("Event: " + name + "\n");
+	  for (int i = 0; i<people.size(); i++){
+		  line.append(people.get(i).getN() + "\n");
+	  }
+	  return line;
   }
 
   

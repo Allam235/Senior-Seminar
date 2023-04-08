@@ -76,8 +76,8 @@ class Table{
     for(int i = 0; i<order.length-1;i++){
 			order[i] = replace[i%replace.length];
 	}
-    schedule();
-  }// close sort 
+	schedule();
+  }// close makeSchedule 
   
   public void schedule(){
 	  int n = 0;
@@ -109,7 +109,6 @@ class Table{
 			  }// close j loop
 		  }//close i loop
 	  }// close while 
-	  print(sce);
 	  create();
   }// close schedule	
  
@@ -127,38 +126,37 @@ class Table{
   }// close check
   
   public void create(){
-	  System.out.println(people.size());
 	  for(int i = 0; i<people.size(); i++){// loops through the people array list to create schedule for the seminars
 		  int[] choices = {-1,-1,-1,-1,-1};
 		  for (int j = 0; j<choices .length; j++){// the following loops check if the first pref of a person exists in a session, then a second one and then adds the the one with the highest pref to the array choices 
 			  for (int k = 0; k<sce[j].length && choices[j] == -1; k++){
 				  if(sce[k][j] == people.get(i).get1() && check(choices, sce[k][j])){// checks if pref1 exists in that time slot and is acceptable
 					  choices[j] = sce[k][j];
-					  events[sce[k][j]].fill();
+					  events[sce[k][j]].fill(people.get(i));
 				  }
 			  }
 			  for (int k = 0; k<sce[j].length && choices[j] == -1; k++){
 				  if(sce[k][j] == people.get(i).get2() && check(choices, sce[k][j])){// checks if pref2 exists in that time slot and is acceptable
 					  choices[j] = sce[k][j];
-					  events[sce[k][j]].fill();
+					  events[sce[k][j]].fill(people.get(i));
 				  }
 			  }
 			  for (int k = 0; k<sce[j].length && choices[j] == -1; k++){
 				  if(sce[k][j] == people.get(i).get3() && check(choices, sce[k][j])){// checks if that person's pref3 exists in that time slot and is acceptable
 					  choices[j] = sce[k][j];
-					  events[sce[k][j]].fill();
+					  events[sce[k][j]].fill(people.get(i));
 				  }
 			  }
 			  for (int k = 0; k<sce[j].length && choices[j] == -1; k++){
 				  if(sce[k][j] == people.get(i).get4() && check(choices, sce[k][j])){// checks if that person's pref4 exists in that time slot and is acceptable
 					  choices[j] = sce[k][j];
-					  events[sce[k][j]].fill();
+					  events[sce[k][j]].fill(people.get(i));
 				  }
 			  }
 			  for (int k = 0; k<sce[j].length && choices[j] == -1; k++){
 				  if(sce[k][j] == people.get(i).get5() && check(choices, sce[k][j])){// checks if pref5 exists in that time slot and is acceptable
 					  choices[j] = sce[k][j];
-					  events[sce[k][j]].fill();
+					  events[sce[k][j]].fill(people.get(i));
 				  }
 			  }  
 				  
@@ -173,23 +171,46 @@ class Table{
 			  }// close if loop
 		  }// close j loop
 		  people.get(i).fill(choices);// places schedule in person's schedule array in person class
-		  writeFile();
 	  }
+	  writeFFile();
 
 		  
   }
-  
-
-
-  public void writeFile(){
+  public void writeFFile(){// write file by events
 	  try {
 		FileWriter file = new FileWriter("Student_Roster.txt");
-		StringBuilder line = new StringBuilder();
-		file.write("Student Name\t Session 1\t Session 2\t Session 3\t Session 4\t Session 5\n");
-		for (int i = 0; i<5;i++){
-			line.append(events[people.get(0).getS(i)].toString(1) + " ");
+		StringBuilder line;
+		//for(int m = 0; m<events.length; m++){
+			//file.write(events[0].roster() + "\n\n");
+			//System.out.println(m);
+			//file.write(events[m].roster() + "\n\n");
+		//}
+		int len = events.length;
+		for (int i = 0; i<len;i++){
+				//line.append("Session " + (i+1) + ": " + events[people.get(j).getS(i)].toString(1) + "\t\t");
+				file.write(events[i].roster() + "\n\n");
+			}
+		file.close();
+	  } catch (IOException e) {
+		System.out.println("An error occurred.");
+		e.printStackTrace();
+	  }
+  }
+
+
+  public void writeRFile(){// write file by person name and their sessions
+	  try {
+		FileWriter file = new FileWriter("Student_Roster.txt");
+		StringBuilder line;
+		for(int j = 0; j<people.size(); j++){
+
+			line = new StringBuilder();
+			line.append(people.get(j).getN() + ":\t");
+			for (int i = 0; i<5;i++){
+				line.append("Session " + (i+1) + ": " + events[people.get(j).getS(i)].toString(1) + "\t\t");
+			}
+			file.write(line.toString() + "\n\n");
 		}
-		file.write(line.toString());
 		file.close();
 	  } catch (IOException e) {
 		System.out.println("An error occurred.");
