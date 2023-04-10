@@ -1,3 +1,10 @@
+/**
+*@Author: Rithvik Allamaneni
+*4/8/2023
+*The Table class is the main file that has most of the methods that, extract data, create event and person classes from the data, create a schedule based on the data, and finally assign seminars to a person based on their preferences. That information is then used to refill the person class for all the students. Then 2 txt files are created based on events and the person name.
+* This class produces the Event_Roster file that 
+**/
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.Scanner;
@@ -5,6 +12,10 @@ import java.util.ArrayList;
 import java.io.FileWriter;   // Import the FileWriter class
 import java.io.IOException;  // Import the IOException class to handle errors
 
+
+ /*
+creates a schedule based on data from SrSeminar_RawData.csv and then fills a Person class with Seminar based on their preferences
+*/
 class Table{
   int ne = 18; // number of events
   int np = 74; // number of people
@@ -13,13 +24,16 @@ class Table{
   int[][] sce = new int[5][5];//schedule with id numbers of events
   int[] er = new int[ne+1]; // event ranking
   int[] order = new int[ne];
-  static int MAXC = 25;
-
+  static int MAXC = 16;
+  /*
+  fills the person classes in the people ArrayList and the event classes in the er array with information from the SrSeminar_RawData.csv") csv file
+  no returns and args
+  */
   public void getRFile() {
     File myObj = new File("SrSeminar_RawData.csv");
     try {// read file
       Scanner myReader = new Scanner(myObj);
-      String line = myReader.nextLine();
+      String line;
       int k = 0;
       while (myReader.hasNextLine()) {// loop until their are no more lines of data
         line = myReader.nextLine();// moves to next line of data
@@ -44,7 +58,10 @@ class Table{
       e.printStackTrace();
     } // close catch
   }// close getCfile
-
+  /*
+  creates a 2d array that is a schedule and checks if there are any events horizontally that have the same instructor teaching that seminar
+  no returns and args
+  */
   public void makeSchedule(){
     int max;
     int[] replace = new int[ne];
@@ -76,10 +93,7 @@ class Table{
     for(int i = 0; i<order.length-1;i++){
 			order[i] = replace[i%replace.length];
 	}
-	schedule();
-  }// close makeSchedule 
-  
-  public void schedule(){
+
 	  int n = 0;
 	  for(int i = 0; i<5 ;i++){//creates a 2d array from the array order
 		  for(int j = 0; j<5 ;j++){
@@ -110,9 +124,13 @@ class Table{
 		  }//close i loop
 	  }// close while 
 	  create();
-  }// close schedule	
+  }// close makeSchedule	
  
-  
+  /*
+  checks if int n can be placed in array choices which is the schedule for a specific person.
+  the events can not be placed in if the person is already taking that seminars or if that seminar is full
+  takes an int array anf int n as arguments
+  */  
   public boolean check(int[] choices, int n){
 	  for(int i = 0; i<choices.length ; i++){// checks if seminar already exists in the person's schedule
 		  if(choices[i] == n){
@@ -124,7 +142,10 @@ class Table{
 	  }
 	  return true;
   }// close check
-  
+   /*
+  fills every person in the people arraylist with seminars based on their preferences. If a prefered seminar is not there, they are placed in the least occupied seminar.
+  no returns and args
+  */ 
   public void create(){
 	  for(int i = 0; i<people.size(); i++){// loops through the people array list to create schedule for the seminars
 		  int[] choices = {-1,-1,-1,-1,-1};
@@ -162,34 +183,52 @@ class Table{
 				  
 			  if(choices[j] == -1){// if none of the events are acceptable or prefered, the lowest capacity event will be chosen 
 				  int min = sce[0][j];
+				  System.out.println(people.get(i).toString() + " " + j);
 				  for (int k = 1; k<sce[j].length; k++){//finds event in timeslot that has least amount of people;
 					  if(events[min].getC()>=events[sce[k][j]].getC() && check(choices, sce[k][j])){
 						  min = sce[k][j];
 					  }
 				  }
+				  System.out.println(events[min].toString(1) + ": " + events[min].getC());
 				  choices[j] = min;
 			  }// close if loop
 		  }// close j loop
+		  
 		  people.get(i).fill(choices);// places schedule in person's schedule array in person class
 	  }
 	  writeFFile();
+	  writeRFile();
 
 		  
   }
+  /*
+  creates a txt file called Event Roster and writes the participants of each event 
+  no returns and args
+  */
   public void writeFFile(){// write file by events
 	  try {
-		FileWriter file = new FileWriter("Student_Roster.txt");
-		StringBuilder line;
-		//for(int m = 0; m<events.length; m++){
-			//file.write(events[0].roster() + "\n\n");
-			//System.out.println(m);
-			//file.write(events[m].roster() + "\n\n");
-		//}
-		int len = events.length;
-		for (int i = 0; i<len;i++){
-				//line.append("Session " + (i+1) + ": " + events[people.get(j).getS(i)].toString(1) + "\t\t");
-				file.write(events[i].roster() + "\n\n");
-			}
+		FileWriter file = new FileWriter("Event_Roster.txt");
+
+		// for some reason when I use a loop, it always doens't work and says i is null
+		file.write(events[0].roster() + "\n\n");
+			file.write(events[1].roster() + "\n\n");
+			file.write(events[2].roster() + "\n\n");
+			file.write(events[3].roster() + "\n\n");
+			file.write(events[4].roster() + "\n\n");
+			file.write(events[5].roster() + "\n\n");
+			file.write(events[6].roster() + "\n\n");
+			file.write(events[7].roster() + "\n\n");
+			file.write(events[8].roster() + "\n\n");
+			file.write(events[9].roster() + "\n\n");
+			file.write(events[10].roster() + "\n\n");
+			file.write(events[11].roster() + "\n\n");
+			file.write(events[12].roster() + "\n\n");
+			file.write(events[13].roster() + "\n\n");
+			file.write(events[14].roster() + "\n\n");
+			file.write(events[15].roster() + "\n\n");
+			file.write(events[16].roster() + "\n\n");
+			file.write(events[17].roster() + "\n\n");
+
 		file.close();
 	  } catch (IOException e) {
 		System.out.println("An error occurred.");
@@ -197,7 +236,10 @@ class Table{
 	  }
   }
 
-
+  /*
+  creates a txt file called Student Roster and Prints the seminars of each person one by one
+  no returns and args
+  */
   public void writeRFile(){// write file by person name and their sessions
 	  try {
 		FileWriter file = new FileWriter("Student_Roster.txt");
@@ -217,35 +259,5 @@ class Table{
 		e.printStackTrace();
 	  }
 
-  }
-
-	  
-	  
-	  
-	  
-	  
-	  
-	
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
- 
-  public void print(int[][] arr){
-    for (int i = 0; i < arr.length; i++) {
-		for (int j = 0; j < arr[i].length; j++) {
-			System.out.print(arr[j][i] + ",");
-			//System.out.println(j + "," + i);
-		}//close j loop
-		System.out.println();
-    } // close i loop
-    System.out.println();
   }
 }

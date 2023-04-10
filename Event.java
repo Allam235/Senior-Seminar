@@ -1,6 +1,11 @@
+/**
+*@Author: Rithvik Allamaneni
+*4/8/2023
+*The Event Class ccontains info about an event such as name and participants 
+**/
+
 import java.util.ArrayList;
 import java.io.FileWriter;   // Import the FileWriter class
-
 
 
 
@@ -28,6 +33,7 @@ class Event{
   }
   public void fill(Person p){
 	  people.add(p);
+	  //System.out.println(name + "\n" + print() + "\n");
   }
   
 
@@ -41,8 +47,8 @@ class Event{
   
   public StringBuilder roster(){
 	  StringBuilder line = new StringBuilder();
-	  line.append("Event: " + name + "\n");
-	  for (int i = 0; i<people.size(); i++){
+	  line.append(name);
+	  for(int i = 0; i<people.size(); i++){
 		  line.append(people.get(i).getN() + "\n");
 	  }
 	  return line;
