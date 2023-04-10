@@ -97,7 +97,7 @@ class Table{
 	  int n = 0;
 	  for(int i = 0; i<5 ;i++){//creates a 2d array from the array order
 		  for(int j = 0; j<5 ;j++){
-			  sce[i][j] = order[n];
+			  sce[j][i] = order[n];
 		      n++;
 	      }//close j for loop
 	  }// close i for loop	
@@ -106,8 +106,8 @@ class Table{
 	  boolean pass = false;
 	  while (pass == false){
 		  pass = true;
-		  for(int i = 0; i<4; i++){
-			  for(int j = 0; j<5; j++){
+		  for(int i = 0; i<5; i++){
+			  for(int j = 0; j<4; j++){
 				  for (int k = 1; k<sce[i].length-i; k++){
 					  if(events[sce[i][j]].getT().equals(events[sce[i+k][j]].getT())){
 						  int m = j + 1;//the place the current session will swap with
@@ -123,6 +123,8 @@ class Table{
 			  }// close j loop
 		  }//close i loop
 	  }// close while 
+	  
+
 	  create();
   }// close makeSchedule	
  
@@ -147,6 +149,8 @@ class Table{
   no returns and args
   */ 
   public void create(){
+	  int wrong = 0;
+	  int wrongP = 0;
 	  for(int i = 0; i<people.size(); i++){// loops through the people array list to create schedule for the seminars
 		  int[] choices = {-1,-1,-1,-1,-1};
 		  for (int j = 0; j<choices .length; j++){// the following loops check if the first pref of a person exists in a session, then a second one and then adds the the one with the highest pref to the array choices 
@@ -183,17 +187,25 @@ class Table{
 				  
 			  if(choices[j] == -1){// if none of the events are acceptable or prefered, the lowest capacity event will be chosen 
 				  int min = sce[0][j];
-				  for (int k = 1; k<sce[j].length; k++){//finds event in timeslot that has least amount of people;
+				  int index = 0;
+				  for (int k = 0; k<sce[j].length-1; k++){//finds event in timeslot that has least amount of people;
 					  if(events[min].getC()>=events[sce[k][j]].getC() && check(choices, sce[k][j])){
 						  min = sce[k][j];
+						  index = k;
 					  }
 				  }
+				  events[sce[index][j]].fill(people.get(i));
 				  choices[j] = min;
+				  wrong++;
+				  wrongP++;
 			  }// close if loop
 		  }// close j loop
 		  
 		  people.get(i).fill(choices);// places schedule in person's schedule array in person class
+		  System.out.println(people.get(i).getN() + " errors: " + wrongP);
+		  wrongP = 0;
 	  }
+	  System.out.println("Total Errors: " + (wrong-25));
 	  writeFFile();
 	  writeRFile();
 
@@ -247,9 +259,10 @@ class Table{
 			line = new StringBuilder();
 			line.append(people.get(j).getN() + ":\t");
 			for (int i = 0; i<5;i++){
-				line.append("Session " + (i+1) + ": " + events[people.get(j).getS(i)].toString(1) + "\t\t");
+				line.append("Session " + (i+1) + ": " + events[people.get(j).getS(i)].toString(1) + "(id: " + people.get(j).getS(i) + ")" + "\t\t");
 			}
 			file.write(line.toString() + "\n\n");
+			
 		}
 		file.close();
 	  } catch (IOException e) {
