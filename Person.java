@@ -39,10 +39,8 @@ class Person{
 	  schedule = new int[choices.length];
 	  for (int i = 0; i < choices.length; i++) {//copies choices to schedule. You have to copy each element or else just the pointer gets copied
 		schedule[i] = choices[i];
-		//System.out.println(schedule[i]);
       }
-      System.out.println(choices[0] + "," + choices[1] + "," + choices[2] + "," + choices[3] + "," + choices[4] + " " + name);
-  }
+        }
   
   /*
   returns a specific index in the array
@@ -50,7 +48,6 @@ class Person{
   */
   public int getS(int n){
 	  if(schedule!=null){
-		  //System.out.println(schedule[n]);
 		  return schedule[n];
 	  }
 	  return -1;

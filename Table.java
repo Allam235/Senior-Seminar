@@ -183,13 +183,11 @@ class Table{
 				  
 			  if(choices[j] == -1){// if none of the events are acceptable or prefered, the lowest capacity event will be chosen 
 				  int min = sce[0][j];
-				  System.out.println(people.get(i).toString() + " " + j);
 				  for (int k = 1; k<sce[j].length; k++){//finds event in timeslot that has least amount of people;
 					  if(events[min].getC()>=events[sce[k][j]].getC() && check(choices, sce[k][j])){
 						  min = sce[k][j];
 					  }
 				  }
-				  System.out.println(events[min].toString(1) + ": " + events[min].getC());
 				  choices[j] = min;
 			  }// close if loop
 		  }// close j loop
